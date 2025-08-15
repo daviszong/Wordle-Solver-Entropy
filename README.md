@@ -92,7 +92,7 @@ After each guess, tiles show:
 🟨 Yellow: correct letter, wrong position
 ⬜ Gray: letter not in the word
 
-More about the rules: [Wikipedia]([url](https://en.wikipedia.org/wiki/Wordle))
+More about the rules: [Wikipedia](https://en.wikipedia.org/wiki/Wordle)
 
 ## **🤝 Contributions**
 
