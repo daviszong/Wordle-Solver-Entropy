@@ -1,10 +1,11 @@
 # Wordle-Solver-Entropy
-**🎯 Wordle-Solver-Entropy**
+## **🎯 Wordle-Solver-Entropy**
 _A blazing-fast, information-theoretic Wordle AI_
 
 Wordle-Solver-Entropy is a high-performance C++ solver that uses information theory to crack the popular NYT Wordle game with near-optimal efficiency. It strategically selects guesses to maximize entropy (information gain), narrowing the possible solutions as fast as possible.
 
-🧠 How It Works
+## 🧠 How It Works
+
 At a high level, the solver cycles through this loop:
 1. Filter remaining words by matching past feedback
 2. Evaluate each possible guess:
@@ -13,7 +14,8 @@ At a high level, the solver cycles through this loop:
 3. Pick the guess with the highest entropy
 4. Repeat until solved
 
-**Visual overview:**
+## **Visual overview:**
+```text
      ┌─────────────┐
      │ Word List   │   e.g., ["slate", "crane", "trace", ...]
      └─────┬───────┘
@@ -34,22 +36,23 @@ At a high level, the solver cycles through this loop:
    └─────────────┘
          │
    (Repeat until solved)
+```
    
-**⚡ Performance Features**
+## **⚡ Performance Features**
 - Entropy-based guess selection: Always picks the guess that, on average, will reduce the most uncertainty.
 - Monte Carlo fallback: When >1500 candidates remain, uses a random sample for faster entropy estimation.
 - Precomputed feedback table: All pairwise Wordle feedback patterns are computed once and stored.
 - Multithreaded testing: Uses all available CPU cores to batch-test performance.
 - First-guess override: Always starts with "slate" (configurable).
 
-**📊 Benchmark Results**
+## **📊 Benchmark Results**
 Original NYT word list (2,315 words, short_words.txt):
 
 - Average guesses: 3.4903 (within ~2% of the theoretical minimum 3.4212)
 - Time to solve all words: ~0.3s
 - Win rate: 100% (≤6 guesses)
 
-**Extended list (14,855 words, words.txt):**
+## **Extended list (14,855 words, words.txt):**
 - Average guesses: 4.24
 - Time to solve all words: 27.1s
 - Win rate: 98.9%
@@ -57,7 +60,7 @@ Original NYT word list (2,315 words, short_words.txt):
 
 _💡 Real-world optimization potential: weighting guesses by real-world word and letter frequency could improve performance against human-curated word sets._
 
-**🖥️ Installation & Usage**
+## **🖥️ Installation & Usage**
 
 Note: If you're using the solver to play wordle nowadays, be sure to provide the extended words list "words.txt" to the solver in the line G_words = load_words("words.txt") so that it encompasses all the possible solutions of the extended word bank. Also, be sure to use interactive mode (option 1 when the console prompts you), and enter the result string as five digits, 0 for gray, 1 for yellow, 2 for green. (e.g. 00122 for 2 grays, one yellow, and 2 greens.).
 
@@ -67,7 +70,7 @@ git clone https://github.com/yourusername/Wordle-Solver-Entropy.git
 cd Wordle-Solver-Entropy
 ```
 ```
-#Compile (requires C++17 or later)
+# Compile (requires C++17 or later)
 g++ -O3 -std=c++17 -pthread wordle_solver.cpp -o solver
 ```
 ```
@@ -80,7 +83,7 @@ g++ -O3 -std=c++17 -pthread wordle_solver.cpp -o solver
 ./solver
 # Choose option 2
 ```
-**🎮 What is Wordle?**
+## **🎮 What is Wordle?**
 
 Wordle is a 5-letter word guessing game.
 After each guess, tiles show:
@@ -91,7 +94,7 @@ After each guess, tiles show:
 
 More about the rules: [Wikipedia]([url](https://en.wikipedia.org/wiki/Wordle))
 
-**🤝 Contributions**
+## **🤝 Contributions**
 
 PRs, optimizations, and alternative strategy experiments are welcome!
 Whether you’re into AI theory, C++ performance tuning, or just want to use the solver to improve your wordle scores, feel free to dive in! 
