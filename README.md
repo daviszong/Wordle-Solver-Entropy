@@ -1,8 +1,97 @@
 # Wordle-Solver-Entropy
-Wordle-Solver-Entropy is a simple and efficient solver that uses information theory to play the popular New York Times Wordle game optimally. The solver first calculates the number of candidate words still possible out of the remaining words and picks the guess that is expected to provide the most additional information and thus narrow the sample space the most. When tested on the original wordle dataset of 2315 words (labeled short_words.txt) and given the fixed first guess as "slate", the solver guesses the word in **3.4903** guesses on average, within around **2%** of the known minimum of 3.4212 expected guesses required. When there are over 1500 candidate words remaining, the solver chooses not to run the entropy calculations on all the words, instead using Monte-Carlo random sampling to increase efficiency while still maintaining accuracy. Thanks to additional optimizations such as precomputing comparison matrices (the green/yellow/gray tile matchings between any two words) and parallelization for running overall testing, the robot finishes solving all 2315 words in 0.3 seconds, with a **100% win rate** (under or equal to 6 guesses). 
+**🎯 Wordle-Solver-Entropy**
+_A blazing-fast, information-theoretic Wordle AI_
 
-Recently, wordle has updated their word list to include more words, but the actual current up-to-date word list is not readily findable online. However, there is a much larger word list of 14,000+ words (titled words.txt) that encompasses all the possible guesses a user can take. When tested on all words of this larger list of 14855 words, the solver finishes all the games in 27.1 seconds, guessing the word in 4.24 guesses on average and achieving a win rate of 98.9%. The 169 words it fails to guess in 6 or less guesses include words with duplicate or uncommon letters such as waqfs and vives. The practical performance can likely be optimized even more if each word was given a weight of how common it is, as these obscure words are less likely to be a wordle solution. 
+Wordle-Solver-Entropy is a high-performance C++ solver that uses information theory to crack the popular NYT Wordle game with near-optimal efficiency. It strategically selects guesses to maximize entropy (information gain), narrowing the possible solutions as fast as possible.
 
-This code can be copied onto your local computer using git clone in a terminal or in VS Code. Feel free to use or modify this code as you wish as well, and any comments or optimization suggestions are highly welcomed! 
+🧠 How It Works
+At a high level, the solver cycles through this loop:
+1. Filter remaining words by matching past feedback
+2. Evaluate each possible guess:
+      → Simulate its feedback patterns for all possible solutions
+      → Calculate the expected information gain (entropy)
+3. Pick the guess with the highest entropy
+4. Repeat until solved
 
-[Wordle]([url](https://www.nytimes.com/games/wordle/index.html)) is a word game where the user tries to guess a 5-letter word and is given feedback after each incorrect guess. See [here ]([url](https://en.wikipedia.org/wiki/Wordle)) for a more detailed description of Wordle's rules. 
+**Visual overview:**
+     ┌─────────────┐
+     │ Word List   │   e.g., ["slate", "crane", "trace", ...]
+     └─────┬───────┘
+           │
+           ▼
+   ┌─────────────┐
+   │ Filter pool │   ← Remove words inconsistent with past feedback
+   └─────┬───────┘
+         │
+         ▼
+   ┌─────────────┐
+   │ Entropy calc│   ← Pick the guess that best splits the search space
+   └─────┬───────┘
+         │
+         ▼
+   ┌─────────────┐
+   │ Make guess  │
+   └─────────────┘
+         │
+   (Repeat until solved)
+   
+**⚡ Performance Features**
+- Entropy-based guess selection: Always picks the guess that, on average, will reduce the most uncertainty.
+- Monte Carlo fallback: When >1500 candidates remain, uses a random sample for faster entropy estimation.
+- Precomputed feedback table: All pairwise Wordle feedback patterns are computed once and stored.
+- Multithreaded testing: Uses all available CPU cores to batch-test performance.
+- First-guess override: Always starts with "slate" (configurable).
+
+**📊 Benchmark Results**
+Original NYT word list (2,315 words, short_words.txt):
+
+- Average guesses: 3.4903 (within ~2% of the theoretical minimum 3.4212)
+- Time to solve all words: ~0.3s
+- Win rate: 100% (≤6 guesses)
+
+**Extended list (14,855 words, words.txt):**
+- Average guesses: 4.24
+- Time to solve all words: 27.1s
+- Win rate: 98.9%
+- Common failure cases: rare/duplicate heavy words like waqfs, vives
+
+_💡 Real-world optimization potential: weighting guesses by real-world word and letter frequency could improve performance against human-curated word sets._
+
+**🖥️ Installation & Usage**
+
+Note: If you're using the solver to play wordle nowadays, be sure to provide the extended words list "words.txt" to the solver in the line G_words = load_words("words.txt") so that it encompasses all the possible solutions of the extended word bank. Also, be sure to use interactive mode (option 1 when the console prompts you), and enter the result string as five digits, 0 for gray, 1 for yellow, 2 for green. (e.g. 00122 for 2 grays, one yellow, and 2 greens.).
+
+```
+# Clone the repository: 
+git clone https://github.com/yourusername/Wordle-Solver-Entropy.git
+cd Wordle-Solver-Entropy
+```
+```
+#Compile (requires C++17 or later)
+g++ -O3 -std=c++17 -pthread wordle_solver.cpp -o solver
+```
+```
+# Run interactive mode
+./solver
+# Choose option 1
+```
+```
+# Run benchmark mode
+./solver
+# Choose option 2
+```
+**🎮 What is Wordle?**
+
+Wordle is a 5-letter word guessing game.
+After each guess, tiles show:
+
+🟩 Green: correct letter & position
+🟨 Yellow: correct letter, wrong position
+⬜ Gray: letter not in the word
+
+More about the rules: [Wikipedia]([url](https://en.wikipedia.org/wiki/Wordle))
+
+**🤝 Contributions**
+
+PRs, optimizations, and alternative strategy experiments are welcome!
+Whether you’re into AI theory, C++ performance tuning, or just want to use the solver to improve your wordle scores, feel free to dive in! 
