@@ -1,8 +1,8 @@
-# Wordle-Solver-Entropy
-## **🎯 Wordle-Solver-Entropy**
+# Wordle Solver Entropy
+## **🎯 Wordle Solver Entropy**
 _A blazing-fast, information-theoretic Wordle AI_
 
-Wordle-Solver-Entropy is a high-performance C++ solver that uses information theory to crack the popular NYT Wordle game with near-optimal efficiency. It strategically selects guesses to maximize entropy (information gain), narrowing the possible solutions as fast as possible.
+Wordle Solver Entropy is a high-performance C++ solver that uses information theory to crack the popular NYT Wordle game with near-optimal efficiency. It strategically selects guesses to maximize entropy (information gain), narrowing the possible solutions as fast as possible.
 
 ## 🧠 How It Works
 
